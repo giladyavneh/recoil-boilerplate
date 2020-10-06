@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { useRecoilState } from "recoil";
+import { rectanglesIdArrayState } from "../../atoms";
+import {rectFamily} from "../../App/atomFamily"
 import "./menu.css";
 
 function Menu() {
@@ -6,8 +9,17 @@ function Menu() {
 	const [widthInput, setWidthInput] = useState(75);
 	const [heightInput, setHeightInput] = useState(75);
 	const [colorInput, setColorInput] = useState("#769fcd");
+	const [count, setCount]= useState(1)
+	const [rectArray, setRectArray]=useRecoilState(rectanglesIdArrayState)
+	const [rect, setRect]=useRecoilState(rectFamily(count))
+	
+	const submitShape = () => {
+		setRectArray(oldArr=>oldArr.concat([count]))
+		setRect({width:widthInput, height:heightInput, color:colorInput})
+		setCount(c=>c+1)
 
-	const submitShape = () => {};
+	};
+	
 	return (
 		<div className="sidebar__menu">
 			<label htmlFor="widthInput">Width:</label>
@@ -38,6 +50,7 @@ function Menu() {
 			<button onClick={submitShape} id="add-shape">
 				Add Shape
 			</button>
+			<div id="idCounter">{rectArray.length}</div>
 		</div>
 	);
 }
